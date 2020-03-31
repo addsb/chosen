@@ -478,6 +478,8 @@ class Chosen extends AbstractChosen
     if @results_showing and @result_highlight
       next_sib = @result_highlight.nextAll("li.active-result").first()
       this.result_do_highlight next_sib if next_sib
+    else if @results_showing and @disable_highlight_result_on_search and !@search_results.find(".create-option")[0]
+      this.winnow_results_set_highlight();
     else if @results_showing and @create_option
       this.result_do_highlight(@search_results.find('.create-option'))
     else
