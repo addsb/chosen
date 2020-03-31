@@ -40,6 +40,7 @@ class AbstractChosen
     @persistent_create_option = @options.persistent_create_option || false
     @skip_no_results = @options.skip_no_results || false
     @disable_highlight_result_on_search = if @options.disable_highlight_result_on_search? then @options.disable_highlight_result_on_search else false
+    @lower_case_search_term = if @options.lower_case_search_term? then @options.lower_case_search_term else false
 
   set_default_text: ->
     if @form_field.getAttribute("data-placeholder")
@@ -173,7 +174,11 @@ class AbstractChosen
     results = 0
     exact_result = false
 
-    query = this.get_search_text()
+    if @lower_case_search_term
+      query = this.get_search_text().toLowerCase()
+    else
+      query = this.get_search_text()
+      
     escapedQuery = query.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&")
     regex = this.get_search_regex(escapedQuery)
     exactRegex = new RegExp("^#{escapedQuery}$")
