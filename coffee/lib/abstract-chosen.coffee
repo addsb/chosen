@@ -39,6 +39,7 @@ class AbstractChosen
     @create_option = @options.create_option || false
     @persistent_create_option = @options.persistent_create_option || false
     @skip_no_results = @options.skip_no_results || false
+    @disable_highlight_result_on_search = if @options.disable_highlight_result_on_search? then @options.disable_highlight_result_on_search else false
 
   set_default_text: ->
     if @form_field.getAttribute("data-placeholder")
@@ -225,7 +226,8 @@ class AbstractChosen
       this.no_results query unless @create_option and @skip_no_results
     else
       this.update_results_content this.results_option_build()
-      this.winnow_results_set_highlight()
+      unless @disable_highlight_result_on_search 
+        this.winnow_results_set_highlight()
 
     if @create_option and (results < 1 or (!exact_result and @persistent_create_option)) and query.length
       this.show_create_option( query )
